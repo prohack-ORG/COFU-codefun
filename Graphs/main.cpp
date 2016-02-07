@@ -5,7 +5,7 @@ Date   : 6th Feb 2016
 
 */
 
-#include "graph_implementation.h"
+#include "graph_func.h"
 
 // Function to take input, drive the graph and give output
 int main(){
@@ -19,7 +19,8 @@ int main(){
 	g.insert_edges(3,0);		
 	g.insert_edges(2,0);		
 	g.insert_edges(1,4);
-	g.print_adj_graph();		
+	g.print_adj_graph();
+	dfs(g);	
 	cout<<endl;
 	return 0;
 }

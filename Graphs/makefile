@@ -4,7 +4,7 @@ CXX = g++
 
 CFLAGS = -Wall -c
 
-SOURCES = graph_implementation.cpp main.cpp graph_implementation.h
+SOURCES = graph_implementation.cpp main.cpp dfs.cpp
 
 OBJECTS = $(SOURCES:.cpp = .o)
 

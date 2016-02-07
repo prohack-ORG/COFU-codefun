@@ -11,6 +11,12 @@ Date   : 6th Feb 2016
 
 #include "graph_implementation.h"
 
+// Function to return details like number of nodes and edges in graph
+void Graph::details(){
+	cout<<"\nNodes : "<<num_nodes;
+	cout<<"\nEdges : "<<num_edges;
+}
+
 // Function to add an edge to graph
 void Graph::insert_edges(int src, int dest){
 	struct Node *new_node = (struct Node *)malloc(sizeof(Node ));
@@ -30,6 +36,7 @@ void Graph::insert_edges(int src, int dest){
 		temp->next_node = new_node;
 		cout<<"\nInserted node "<<dest<<" at "<<src;
 	}
+	num_edges++;
 }
 
 // Function to print Adjacency list representation of Graph 
