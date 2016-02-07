@@ -20,22 +20,30 @@ void dfs(Graph g, int start_vertex){
 	while(counter!=g.get_numEdges()){
 		cout<<src<<"\t";
 		struct Node *ref_node = g.node_list[src].head_node;
+		//cout<<"\n**1 : "<<ref_node->dest_node;
 		if(ref_node->visited){
 			cout<<"\nLoop detected in Graph at node : "<<src;
-			exit(-1);
+			break;
 		}
+		
+		//cout<<"\n**2";
 		ref_node->visited = 1;
 		if(ref_node==NULL && s.empty() && counter!=g.get_numEdges()){
 			cout<<"\nDisconnected Graph";
-			exit(-1);
+			break;
 		}
-		else if(ref_node==NULL && !s.empty());
-		else{
-			while(!ref_node){
-				ref_node = ref_node->next_node;
+		
+		//cout<<"\n**3";
+		//else if(ref_node==NULL && !s.empty());
+		//else{
+			while(ref_node!=NULL){
+				//cout<<"\nIn loop";
 				s.push(ref_node->dest_node);
+				ref_node = ref_node->next_node;
 			}
-		}
+		//}
+		
+		//cout<<"\n**4";
 		src = s.top();
 		s.pop();
 		counter++;
