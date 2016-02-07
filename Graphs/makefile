@@ -1,3 +1,5 @@
+#makefile for building the files
+
 CXX = g++
 
 CFLAGS = -Wall -c
