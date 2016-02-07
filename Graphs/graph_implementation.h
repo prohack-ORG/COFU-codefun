@@ -11,6 +11,7 @@ Date   : 7th Feb 2016
 using namespace std;
 struct Node{
 	int dest_node;
+	int visited;
 	Node *next_node;
 };
 
@@ -21,8 +22,8 @@ struct Node_list{
 class Graph{
 	int num_nodes;
 	int num_edges;
-	struct Node_list *node_list;
   public :
+	struct Node_list *node_list;
 	Graph(int num){
 		num_edges = 0;
 		num_nodes = num;
@@ -31,6 +32,8 @@ class Graph{
 			node_list[i].head_node=NULL;
 		}
 	}
+	int get_numEdges(){return num_edges;}
+	int get_numNodes(){return num_nodes;}
 	void details();
 	void insert_edges(int src, int dest);
 	void print_adj_graph();

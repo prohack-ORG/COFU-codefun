@@ -20,7 +20,7 @@ int main(){
 	g.insert_edges(2,0);		
 	g.insert_edges(1,4);
 	g.print_adj_graph();
-	dfs(g);	
+	dfs(g,0);	
 	cout<<endl;
 	return 0;
 }

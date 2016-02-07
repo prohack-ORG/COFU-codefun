@@ -22,6 +22,7 @@ void Graph::insert_edges(int src, int dest){
 	struct Node *new_node = (struct Node *)malloc(sizeof(Node ));
 	new_node->dest_node = dest;
 	new_node->next_node = NULL;
+	new_node->visited = 0;
 	if(node_list[src].head_node==NULL){
 		node_list[src].head_node = new_node;
 		cout<<"\nInserted node "<<dest<<" at "<<src;
