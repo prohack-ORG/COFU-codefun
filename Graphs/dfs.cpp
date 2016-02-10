@@ -9,9 +9,10 @@ Date   : 7th Feb 2016
 #include "stack"
 
 void dfs(Graph g, int start_vertex){
+	int data[g.get_numNodes()];
 	cout<<"\nTotal ";
 	g.details();
-	cout<<"\nDFS traversal from vertex : "<<start_vertex<<endl;
+	cout<<"\nDFS traversal from vertex :\t"<<start_vertex<<endl;
 	int counter = 0;
 	stack<int> s;
 	s.push(start_vertex);
@@ -19,36 +20,32 @@ void dfs(Graph g, int start_vertex){
 	while(counter!=g.get_numNodes()){
 		int src = s.top();
 		s.pop();
-		cout<<src<<"\t";
+		data[counter] = src;
+		//cout<<"\nDFS : \t\t\t\t"<<src;
 		ref_node = g.node_list[src].head_node;
-				
+		counter++;				
 		if(ref_node==NULL){
-			//ref_node->visited = 1;
-			//counter++;
 			continue;
 		}
 
-		cout<<"\n**1 : "<<ref_node->dest_node;
 		if(ref_node->visited){
 			cout<<"\nLoop detected in Graph at node : "<<src;
 			break;
 		}
 		ref_node->visited = 1;
 		
-		counter++;
-		cout<<"\n**2";
 		if(ref_node==NULL && s.empty() && counter!=g.get_numEdges()){
 			cout<<"\nDisconnected Graph";
 			break;
 		}
 		
-		cout<<"\n**3";
-			while(ref_node!=NULL){
-				s.push(ref_node->dest_node);
-				cout<<"\nIn loop pushing "<<ref_node->dest_node<<" now";
-				ref_node = ref_node->next_node;
-			}
+		while(ref_node!=NULL){
+			s.push(ref_node->dest_node);
+			ref_node = ref_node->next_node;
+		}
 		
-		cout<<"\n**4";
 	}
+	cout<<"\nDFS :\t";
+	for(int i = 0;i<g.get_numNodes();i++)
+		cout<<data[i]<<"\t";
 }
