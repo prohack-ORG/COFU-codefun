@@ -21,6 +21,13 @@ void dfs(Graph g, int start_vertex){
 		s.pop();
 		cout<<src<<"\t";
 		ref_node = g.node_list[src].head_node;
+				
+		if(ref_node==NULL){
+			//ref_node->visited = 1;
+			//counter++;
+			continue;
+		}
+
 		cout<<"\n**1 : "<<ref_node->dest_node;
 		if(ref_node->visited){
 			cout<<"\nLoop detected in Graph at node : "<<src;
