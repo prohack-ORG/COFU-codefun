@@ -29,18 +29,19 @@ void dfs(Graph g, int start_vertex){
 		}
 
 		if(ref_node->visited){
-			cout<<"\nLoop detected in Graph at node : "<<src;
-			break;
+			cout<<"\nLoop detected in Graph at node : "<<src<<endl;
+			exit(-1);
 		}
 		ref_node->visited = 1;
 		
-		if(ref_node==NULL && s.empty() && counter!=g.get_numEdges()){
+		if(ref_node==NULL && s.empty() && counter!=g.get_numNodes()){
 			cout<<"\nDisconnected Graph";
 			break;
 		}
 		
 		while(ref_node!=NULL){
 			s.push(ref_node->dest_node);
+			cout<<"\npushed "<<ref_node->dest_node<<" to stack";
 			ref_node = ref_node->next_node;
 		}
 		
