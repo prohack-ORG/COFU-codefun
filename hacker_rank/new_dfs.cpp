@@ -28,6 +28,7 @@ using namespace std;
 class Graph{
 	int V,E;
 	int num_dis_graphs;
+	int *node_count;
 	bool *visited;
 	list<int > *adj;
 	stack<int> s;
@@ -37,23 +38,26 @@ class Graph{
 		E=0;
 		num_dis_graphs=0;
 		adj = new list<int>[num];
+		node_count = new int[num];
 		visited = new bool[num];
 		for(int i=0;i<V;i++)
 			visited[i]=false;
 	}
 	void insert_node(int start, int end);
-	int dfs(int start);
+	void dfs(int start);
+	int find_combination();
 };
 
 void Graph::insert_node(int start, int end){
 	
 	adj[start].push_back(end);	
+	adj[end].push_back(start);
 	E++;
 }
 
-int Graph::dfs(int start){
+void Graph::dfs(int start){
 	if(visited[start]==true)
-		return 1;
+		return;
 	num_dis_graphs++;
 	cout<<"\n\nSub-Graph "<<num_dis_graphs<<" DFS: ";
 	int count=0;
@@ -70,7 +74,19 @@ int Graph::dfs(int start){
 				s.push(*i);
 		}
 	}
-	return count;
+	node_count[num_dis_graphs-1] = count;
+}
+
+int Graph::find_combination(){
+	int sum = 0;
+	cout<<endl;
+	for(int i=0;i<num_dis_graphs;i++)
+		cout<<node_count[i]<<" ";
+	cout<<endl;
+	for(int i=0;i<num_dis_graphs;i++)
+		for(int j=i+1;j<num_dis_graphs;j++)
+			sum+=node_count[i]*node_count[j];
+	return sum;
 }
 
 int main()
@@ -85,7 +101,7 @@ int main()
 		g.insert_node(st_pt,en_pt);
 	}
 	for(int i=0;i<N;i++)
-		mul*=g.dfs(i);
-	cout<<endl<<mul<<endl<<endl;
+		g.dfs(i);
+	cout<<endl<<g.find_combination()<<endl<<endl;
 	return 0;
 }
