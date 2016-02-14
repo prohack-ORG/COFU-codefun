@@ -84,12 +84,14 @@ void Graph::dfs(int start){
 		}
 	}
 	node_count[num_dis_graphs-1] = count;
-	//cout<<"\nNo of nodes in graph : "<<num_dis_graphs-1<<" : "<<count; 
+	cout<<"\nNo of nodes in graph : "<<num_dis_graphs-1<<" : "<<count; 
 }
 
 long Graph::find_combination(){
 	long sum = 0;
-	//cout<<endl<<"No of Subgraphs : "<<num_dis_graphs<<endl;
+	cout<<endl<<"No of Subgraphs : "<<num_dis_graphs<<endl;
+	if(num_dis_graphs<=1)
+		return 0;
 	/*
 	long temp[num_dis_graphs];
 	temp[0]=node_count[0];
