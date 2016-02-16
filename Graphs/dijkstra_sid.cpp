@@ -17,7 +17,7 @@ int getMinDist(int *temp, int *visited, int N){
 	int pos=0;
 	int min = INT_MAX;
 	for(int i=0; i<N; i++)
-		if(!visited[i] && temp[i]>min)
+		if(!visited[i] && temp[i]<min)
 			min=temp[i], pos=i;
 	return pos;
 }
