@@ -95,37 +95,24 @@ void DijkstraAlgo(int **Graph, int sA,int sB,float *output, int N)
 
 
 int main()
-{ /*
-
-     2         //T  
-     2 1 1     //N M K
-     1 2 10    //A B C
-
-     4 4 1
-     1 2 10
-     2 3 10
-     3 4 1
-     4 1 5
-
-   */ 
-
+{   
+	freopen("input_savita.txt","r",stdin);
 	int N,M,K,i,j,sA,sB,A=0,B=0,C=0;
-	scanf(" %d%d%d",&N,&M,&K);
+	scanf(" %d %d %d",&N,&M,&K);
 	int **Graph=new int*[N];
 
-	for(i=0;i<N;i++) 
+	for(i=0;i<N;i++) {
 		Graph[i]=new int[N];
-
-	memset(Graph, 0, sizeof(int)*N*N);
-
+		memset(Graph[i], 0, sizeof(int)*N);
+	}
 	//printf("\n0  %s\n",__func__);
 	for(i=0;i<M;i++)
 	{
-		scanf(" %d%d%d",&A,&B,&C);
-	printf("\n011  %s  A=%d B=%d C=%d \n",__func__, A,B,C);
+		scanf(" %d %d %d",&A,&B,&C);
+		printf("\n011  %s  A=%d B=%d C=%d \n",__func__, A,B,C);
 		Graph[B-1][A-1]=C;
 		Graph[A-1][B-1]=C;
-	printf("\n012  %s\n",__func__);
+		printf("\n012  %s\n",__func__);
 		if(i+1==K) 
 		{
 			sA=A-1,sB=B-1;
@@ -136,7 +123,7 @@ int main()
 	printf("\n1  %s",__func__);
 
 	float *output= new float[2];		
-	 DijkstraAlgo(Graph, sA, sB,output, N);
+	DijkstraAlgo(Graph, sA, sB,output, N);
 	printf("\n%f %f\n",output[0],output[1]);
 	return 0;
 }
