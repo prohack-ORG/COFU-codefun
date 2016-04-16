@@ -7,6 +7,7 @@
 
 */
 
+
 #include <iostream>
 #include <stdio.h>
 #include <limits.h>
@@ -24,9 +25,9 @@ void floyd(int **mat, int n)
 		for(int j=0;j<n;j++)
 			temp[i][j] = mat[i][j];
 
-	for(int i=0;i<n;i++)
-		for(int j=0;j<n;j++)
-			for(int k=0;k<n;k++)
+	for(int k=0;k<n;k++)
+		for(int i=0;i<n;i++)
+			for(int j=0;j<n;j++)
 				if( temp[i][j] > temp[i][k]+temp[k][j])
 					temp[i][j] = temp[i][k]+temp[k][j];
 	for(int i=0;i<n;i++)
