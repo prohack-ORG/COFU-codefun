@@ -6,6 +6,7 @@ using namespace std;
 
 void print(int *arr,int l,int r)
 {
+    printf("\n Printing array\n");
     for(int i=l;i<=r;i++)
         cout<<" "<<arr[i]; cout<<endl;
 }
@@ -16,18 +17,16 @@ int partition(int *arr,int l,int r)
     int pivot=r;
     int i=l-1;
     int j;
-    while(j<r)
+    for(j=l;j<r;j++)
     {
-        while(arr[j]<=arr[pivot])	
-        {
+        if(arr[j]<=arr[pivot])
+        { 
             i++;
             int temp=arr[i];
             arr[i]=arr[j];
             arr[j]=temp;
-        
+
         }
-        while(arr[j]>arr[pivot])
-        j++;
     }
     int temp=arr[i+1];
     arr[i+1]=arr[pivot];
@@ -37,11 +36,9 @@ int partition(int *arr,int l,int r)
 
 void quickSort(int *arr, int l,int r)
 {
-    // if(l==r) return;
     if(l<r)
     {
         int pivot_index=partition(arr,l,r);
-        print(arr,l,r);
         quickSort(arr,l,pivot_index-1);
         quickSort(arr,pivot_index+1,r);
     }
