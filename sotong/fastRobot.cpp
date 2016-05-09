@@ -30,20 +30,20 @@ void print(int a[][200], int m, int n)
 	cout<<endl;
 }
 
-int minimum(int a, int b)
-{
-	return a> b ? b : a;
-}
 
 void fast(int sx, int sy, int prv, int turn_count)
 {
-	if(visited[sx][sy] || !maze[sx][sy])
+	if(sx<0 || sy<0 || sx>N-1 || sy> N-1)
 		return;
-	turn[sx][sy] == minimum(turn[sx][sy],turn_count);
-	cout<<"\nAt "<<sy<<" "<<sx;
+	if(visited[sx][sy] || maze[sx][sy])
+		return;
+	cout<<"\nAt "<<sy<<" "<<sx<<" "<<" "<<prv<<" "<<turn_count;
+	turn[sx][sy] == turn[sx][sy] > turn_count ? turn_count : turn[sx][sy];
 	visited[sx][sy]=1;
-	if(sx == Ex-1 && sy == Ey-1)
+	if(sx == Ey-1 && sy == Ex-1)
 	{
+		print(visited,M,N);
+		visited[sx][sy]=0;
 		return;
 	}
 	if(prv == 0)
@@ -73,10 +73,10 @@ void fast(int sx, int sy, int prv, int turn_count)
 int main()
 {
 	char ch;
-	freopen("intput_fastRobot.txt","r",stdin);
+	freopen("input_fastRobot.txt","r",stdin);
 	cin>>T;
 	int sx,sy;
-	for(int test=0;  test<=T; test++)
+	for(int test=1;  test<=T; test++)
 	{
 		cin>>N>>M;
 		cin>>sx>>sy>>Ex>>Ey;
@@ -87,9 +87,11 @@ int main()
 			{
 				cin>>ch;
 				maze[i][j] = ch - '0';
+				turn[i][j] = INT_MAX;
 			}
 		print(maze,M,N);
 		fast(sy-1, sx-1, 0, 0);
+		print(turn,M,N);
 		cout<<"\n#"<<test<<" : "<<turn[Ey-1][Ex-1]<<endl;
 	}
 	return 0;
