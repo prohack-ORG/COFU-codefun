@@ -6,19 +6,19 @@
 using namespace std;
 #define XDIR 1
 #define YDIR 2
-#define MAX INT_MAX
+#define MAX 55 
 
 int MAZE[200][200];
 int visited[200][200];
 int w,h;
 int countIndex;
-void print()
+void print(int a[][200])
 {
     for(int i=0;i<h;i++)
     {
         cout<<endl;
         for(int j=0;j<w;j++)
-            cout<<MAZE[i][j]<<" ";
+            cout<<a[i][j];
     }
     cout<<endl;
 }        
@@ -42,7 +42,7 @@ int* extractMin(int **arr)
 bool safe(int i,int j)
 {
     if(i<h && i>=0 && j<w && j>=0 && !MAZE[i][j] && !visited[i][j])
-        return true;
+return true;
     return false;
 }    
 
@@ -56,48 +56,53 @@ int callDijkstra(int x1,int y1,int x2,int y2)
     }
     pqArray[x1*w+y1][0]=0;
     int count=0;
-    while(count!=countIndex)
+    while(count!=countIndex-1)
     {
         count++;
         int *in=new int[2];
 	in=extractMin(pqArray);
         visited[in[0]][in[1]]=1;
         int dir=pqArray[in[0]*w+in[1]][1];
+//	cout<<"\n calling for : "<<in[0]<<" "<<in[1]<<" dir : "<<dir;
         int temp=in[0]*w+in[1];
         if(safe(in[0]-1,in[1]))
         {
             if(dir==-1 || dir==XDIR)
             if((pqArray[(in[0]-1)*w+in[1]][0])>pqArray[temp][0]) 
                 pqArray[(in[0]-1)*w+in[1]][0]=pqArray[temp][0], pqArray[(in[0]-1)*w+in[1]][1]=XDIR;
-            else if(dir==YDIR && pqArray[(in[0]-1)*w+in[1]][0]>pqArray[temp][0]+1) 
+            if(dir==YDIR && pqArray[(in[0]-1)*w+in[1]][0]>pqArray[temp][0]+1) 
                 pqArray[(in[0]-1)*w+in[1]][0]=pqArray[temp][0]+1, pqArray[(in[0]-1)*w+in[1]][1]=XDIR;
         }
-        if(safe(in[0]+1,in[1]))
+   
+	if(safe(in[0]+1,in[1]))
         {
             if(dir==-1 || dir==XDIR)
             if ((pqArray[(in[0]+1)*w+in[1]][0])>pqArray[temp][0]) 
                 pqArray[(in[0]+1)*w+in[1]][0]=pqArray[temp][0], pqArray[(in[0]+1)*w+in[1]][1]=XDIR;
-            else if(dir==YDIR && pqArray[(in[0]+1)*w+in[1]][0]>pqArray[temp][0]+1) 
-                pqArray[(in[0]+1)*w+in[1]][0]=pqArray[temp][0]+1, pqArray[(in[0]+1)*w+in[1]][1]=XDIR;
-        }
+            if(dir==YDIR && pqArray [ (in[0]+1)*w+in[1] ][0]>=(pqArray[temp][0]+1)) 
+                pqArray[(in[0]+1)*w+in[1]][0]=pqArray[temp][0]+1;
+		 pqArray[(in[0]+1)*w+in[1]][1]=XDIR;
+}
         if(safe(in[0],in[1]-1))
         {
             if(dir==-1 || dir==YDIR)
             if((pqArray[in[0]*w+in[1]-1][0])>pqArray[temp][0]) 
                 pqArray[in[0]*w+in[1]-1][0]=pqArray[temp][0], pqArray[in[0]*w+in[1]-1][1]=YDIR;
-            else if(dir==XDIR && pqArray[in[0]*w+in[1]-1][0]>pqArray[temp][0]+1) 
+            if(dir==XDIR && pqArray[in[0]*w+in[1]-1][0]>(pqArray[temp][0]+1)) 
                 pqArray[in[0]*w+in[1]-1][0]=pqArray[temp][0]+1, pqArray[in[0]*w+in[1]-1][1]=YDIR;
         }
+
         if(safe(in[0],in[1]+1))
         {
             if(dir==-1 || dir==YDIR)
             if((pqArray[in[0]*w+in[1]+1][0])>pqArray[temp][0]) 
                 pqArray[in[0]*w+in[1]+1][0]=pqArray[temp][0], pqArray[in[0]*w+in[1]+1][1]=YDIR;
-            else if(dir==XDIR && pqArray[in[0]*w+in[1]+1][0]>pqArray[temp][0]+1) 
+            if(dir==XDIR && pqArray[in[0]*w+in[1]+1][0]>(pqArray[temp][0]+1)) 
                 pqArray[in[0]*w+in[1]+1][0]=pqArray[temp][0]+1, pqArray[in[0]*w+in[1]+1][1]=YDIR;
         }
     
     }
+print(visited);
 return pqArray[x2*w+y2][0];
 }
 int main()
@@ -119,8 +124,7 @@ int main()
                 MAZE[i][j]=ch-'0';visited[i][j]=0;
                 if(ch=='0') countIndex++;
             }
-	cout<<"\n"<<x1<<" "<<y1<<" "<<x2<<" "<<y2<<endl;
-        print();
+//        print(MAZE);
         cout<<callDijkstra(y1-1,x1-1,y2-1,x2-1)<<endl; 
 
     }
