@@ -32,8 +32,10 @@ long findmultcost(int *a, int s, int e)
 long findcost_dp(int *a, int n)
 {
 	int temp[n][n];
-	for(int i=0;i<n;i++)
-		temp[i][i]=0;//,temp[0][i] = 0, temp[i][0]=0;
+	for(int i=0;i<n;i++){
+		for(int j=0;j<n;j++)
+			temp[i][j]=INT_MAX;
+		temp[i][i]=0;}//,temp[0][i] = 0, temp[i][0]=0;
 	for(int L=2;L<n;L++)				//For the length of bracket
 		for(int i=1;i<n-L+1;i++)		//for start of bracket
 		{
@@ -46,11 +48,12 @@ long findcost_dp(int *a, int n)
 					temp[i][j] = val;
 			}
 		}
-/*	for(int i=0;i<n;i++){
+	for(int i=0;i<n;i++){
 		cout<<endl;
 		for(int j=0;j<n;j++)
 			cout<<temp[i][j]<<" ";
-	}*/
+	}
+	cout<<endl;
 	return temp[1][n-1];
 }
 
