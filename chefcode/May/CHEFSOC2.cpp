@@ -1,9 +1,11 @@
 #include<iostream>
 #include<stdio.h>
 #include<list>
+#define MOD 1000000007
 using namespace std;
 
-int dogsArray[1001], passArray[1001];
+
+long int dogsArray[1001], passArray[1001];
 int N,M,S;
 struct xy{
 	int x;
@@ -71,9 +73,8 @@ int main()
 		for(int i=0;i<M;i++) cin>>passArray[i];
 		SoccorBFS(0,S-1);
 //		SoccorBacktracking(0,S-1);
-		//		cout<<"\n aaraay \n";
-		for(int i=0;i<N;i++) cout<<dogsArray[i]<<" "; cout<<endl;
+		for(int i=0;i<N;i++) cout<<dogsArray[i]%MOD<<" "; cout<<endl;
 	}
-
+return 0;
 
 }
