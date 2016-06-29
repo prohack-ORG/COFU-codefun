@@ -16,12 +16,22 @@
 
 using namespace std;
 
+void printMatrix(unsigned char *src_image, int width, int height)
+{
+	for(int i=0;i<height;i++)
+	{
+		cout<<endl;
+		for(int j=0;j<width;j++)
+			cout<<(*(src_image + i*width + j)-'0')<<" ";
+	}
+}
+
 class test_image
 {
 	int width, height;
-	unsigned char* src_image;
 
 public:
+	unsigned char* src_image;
 	test_image()
 	{
 		width  = WIDTH;
@@ -29,7 +39,6 @@ public:
 		src_image = (unsigned char *)malloc(sizeof(unsigned char )*width*height);
 	}	
 	bool readImage(char *name);
-	void printImage();
 };
 
 bool test_image :: readImage(char *name)
@@ -44,22 +53,13 @@ bool test_image :: readImage(char *name)
 	return true;
 }
 
-void test_image :: printImage()
-{
-	for(int i=0;i<height;i++)
-	{
-		cout<<endl;
-		for(int j=0;j<width;j++)
-			cout<<*(short*)(src_image + i*width + j)<<" ";
-	}
-}
 
 class Face_train
 {
 	int width, height;
 	int NUM;
 	test_image *t;
-	unsigned char **training_set;
+	unsigned char *training_set;
 public :
 	Face_train(int w, int h, int num_images)
 	{
@@ -67,7 +67,7 @@ public :
 		width = w;
 		height = h;
 		t = (test_image *)malloc(sizeof(test_image)*NUM);
-		train_set = (unsigned char *)malloc(sizeof(unsigned char *)*width*height);
+		training_set = (unsigned char *)malloc(sizeof(unsigned char )*width*height*NUM);
 	}
 	void readDataset(char *path)
 	{
@@ -87,17 +87,27 @@ public :
 	{
 		for(int i=0;i<width*height;i++)
 		{
-			train_set[i] = (unsigned char *)malloc(sizeof(unsigned char)*NUM);
+			//training_set[i] = (unsigned char *)malloc(sizeof(unsigned char)*NUM);
 			for(int j=0;j<NUM;j++)
-				train_set[i][j] = *(t[j].src_image[i/height][i%width];
+				*(training_set+i*NUM+j) = *(t[j].src_image + (i/height) *width + (i%width));
 		}
+	}
+	
+	void printTest_Images()
+	{
+		for(int i=0;i< NUM; i++)
+			printMatrix(t[i].src_image, width, height);
+		printMatrix(training_set, NUM, width*height);
 	}
 };
 
-int main()
+int main(int argc, char **argv)
 {
 	Face_train fTrain(WIDTH, HEIGHT, NUM_IMAGES);
-	fTrain.resdDataset("data/");
+	char path[100];
+	sprintf(path,"data/");
+	fTrain.readDataset(path);
+	fTrain.printTest_Images();
 	cout<<"endl";
 	return 0;
 }
