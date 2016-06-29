@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <malloc.h>
 
-#define NUM 10
+#define NUM_IMAGES 10
 #define WIDTH 50
 #define HEIGHT 50
 
@@ -54,22 +54,50 @@ void test_image :: printImage()
 	}
 }
 
+class Face_train
+{
+	int width, height;
+	int NUM;
+	test_image *t;
+	unsigned char **training_set;
+public :
+	Face_train(int w, int h, int num_images)
+	{
+		NUM = num_images;
+		width = w;
+		height = h;
+		t = (test_image *)malloc(sizeof(test_image)*NUM);
+		train_set = (unsigned char *)malloc(sizeof(unsigned char *)*width*height);
+	}
+	void readDataset(char *path)
+	{
+		char name[100] ;
+		for(int i=1; i<= NUM; i++)
+		{
+			sprintf(name,"%s/image%d.png",path,i);
+			int result = t[i].readImage(name);
+			if(result)
+				cout<<"\nSuccess";
+			else
+				cout<<"\nFailure";
+		}
+	}
+	
+	void createBaseMatrix()
+	{
+		for(int i=0;i<width*height;i++)
+		{
+			train_set[i] = (unsigned char *)malloc(sizeof(unsigned char)*NUM);
+			for(int j=0;j<NUM;j++)
+				train_set[i][j] = *(t[j].src_image[i/height][i%width];
+		}
+	}
+};
+
 int main()
 {
-	test_image t[NUM];
-	char name[20] ;
-	for(int i=1; i<= NUM; i++)
-	{
-		sprintf(name,"image%d.png",i);
-		int result = t[i].readImage(name);
-		if(result)
-		{
-			cout<<"\nSuccess";
-			//t.printImage();
-		}
-		else
-			cout<<"\nFailure";
-	}
+	Face_train fTrain(WIDTH, HEIGHT, NUM_IMAGES);
+	fTrain.resdDataset("data/");
 	cout<<"endl";
 	return 0;
 }
