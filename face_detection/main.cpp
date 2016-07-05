@@ -18,6 +18,8 @@
 
 using namespace std;
 
+static int count=1;
+
 char absolute_val(char val)
 {
 	return val<0 ? -val : val;
@@ -53,9 +55,10 @@ public:
 bool test_image :: readImage(char *name)
 {
 #ifdef MANUAL_TEST_INPUT
+	count++;
 	for(int i=0;i<height;i++)
 		for(int j=0;j<width;j++)
-			*(src_image + i*width +j) = (((i+j+1)*7)%10); 
+			*(src_image + i*width +j) = (((i+j+1)*7*count)%10); 
 #else
 
 	FILE *fp = fopen(name,"r");
@@ -80,6 +83,7 @@ class Face_train
 	int NUM;
 	test_image *t;
 	unsigned char *training_set;
+	unsigned char *covMatrix;
 public :
 	Face_train(int w, int h, int num_images)
 	{
@@ -88,6 +92,9 @@ public :
 		height = h;
 		t = (test_image *)malloc(sizeof(test_image)*NUM);
 		training_set = (unsigned char *)malloc(sizeof(unsigned char )*width*height*NUM);
+		covMatrix = (unsigned char *)malloc(sizeof(unsigned char )*NUM*width*height);
+		for(int i=0;i<NUM*width*height;i++)
+			covMatrix[i] = 0;
 	}
 	void readDataset(char *path)
 	{
@@ -106,7 +113,7 @@ public :
 	{
 		for(int i=0;i<width*height;i++)
 			for(int j=1;j<=NUM;j++)
-				*(training_set+i*NUM+j-1) = *(t[j].src_image + (i/height) *width + (i%width));
+				*(training_set+i*NUM+j-1) = *(t[j].src_image + i);//(i/height) *width + (i%width));
 	}
 	
 	void printTest_Images()
@@ -122,13 +129,29 @@ public :
 		for(int i=0;i<width*height;i++)
 		{
 			tempVal = 0;
-			for(int j=1;j<=NUM;j++)
-				tempVal+=*(training_set+i*NUM+j-1);
+			for(int j=0;j<NUM;j++)
+				tempVal+=*(training_set+i*NUM+j);
 			tempVal = tempVal/NUM;
-			for(int j=1;j<=NUM;j++)
-				*(training_set+i*NUM+j-1) = absolute_val(tempVal-*(training_set+i*NUM+j-1)) ;
+			for(int j=0;j<NUM;j++)
+				*(training_set+i*NUM+j) = absolute_val(tempVal-*(training_set+i*NUM+j)) ;
 		}
 		printMatrix(training_set, NUM, width*height);
+	}
+	
+	void covarianceMatrix()
+	{
+		unsigned char *temp = (unsigned char *)malloc(sizeof(unsigned char )*width*height*NUM);
+		for(int i=0;i<width*height;i++)
+		{
+			for(int j=0;j<NUM;j++)
+				*(temp+j*width*height+i) = *(training_set+i*NUM+j);
+		}
+		printMatrix(temp, width*height, NUM);
+		for(int i=0;i<NUM;i++)
+			for(int j=0;j<NUM;j++)
+				for(int k=0;k<width*height;k++)
+					*(covMatrix+i*NUM+j) += *(temp+i*width*height+k)*(*training_set+k*width*height+j);
+		printMatrix(covMatrix, NUM, NUM);
 	}
 };
 
@@ -141,6 +164,7 @@ int main(int argc, char **argv)
 	fTrain.createBaseMatrix();
 	fTrain.printTest_Images();
 	fTrain.calculateDeviation();
+	fTrain.covarianceMatrix();
 	cout<<endl;
 	return 0;
 }
