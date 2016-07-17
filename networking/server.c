@@ -62,8 +62,8 @@ int main()
 			perror("\nError in accepting");
 			exit(-1);
 		}
-
 		sent = send(cli, message, strlen(message), 0);
+		
 		printf("\nSent %ud bytes to client %d ", sent, inet_ntoa(client.sin_addr));
 		close(cli);
 	}
