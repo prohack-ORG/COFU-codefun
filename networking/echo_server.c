@@ -85,7 +85,13 @@ int main(int argc, char **argv)
 		while(data_len)
 		{
 			data_len = recv(cli, data, MAXDATALEN, 0);
-			if(data_len)
+			if(strcmp(data, "close")==0)
+			{
+				printf("\nTERMINATION COMMAND EXECUTING NOW");
+				close(sock);
+				break;
+			}
+			else if(data_len)
 			{
 				send(cli, data, data_len, 0);
 				data[data_len]='\0';
