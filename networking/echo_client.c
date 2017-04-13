@@ -43,7 +43,7 @@ int main(int argc, char ** argv)
 		printf("\nConnect failure");
 		exit(-1);
 	}
-	
+	int data_len;
 	while(1)
 	{
 		fgets(input, MAXDATASIZE, stdin);
@@ -53,6 +53,24 @@ int main(int argc, char ** argv)
 		len = recv(sock, output, MAXDATASIZE, 0);
 		output[len] = '\0';
 		printf("\nFrom server : %s", output);
+		data_len = 1;
+		while(data_len)
+		{
+			data_len = recv(sock, input, MAXDATASIZE, 0);
+			if(strcmp(data, "close")==1)
+			{
+				printf("\nTERMINATION COMMAND EXECUTING NOW");
+				close(sock);
+				break;
+			}
+			/*
+			else if(data_len)
+			{
+				send(cli, data, data_len, 0);
+				data[data_len]='\0';
+				printf("Sent Message : %s", data);
+			}*/
+		}
 	}
 	close(sock);
 

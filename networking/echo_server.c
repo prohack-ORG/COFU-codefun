@@ -31,7 +31,7 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <errno.h>
-#include <error.h>
+//#include <error.h>
 #include <strings.h>
 #include <arpa/inet.h>
 #define PORT "3940"
@@ -72,7 +72,7 @@ int main(int argc, char **argv)
 		perror("\nListen Error");
 		exit(-1);
 	}
-
+	char input[MAXDATASIZE], output[MAXDATASIZE];
 	while(1) // to keep server on 
 	{
 		if((cli = accept(sock, (struct sockaddr *)&client, &len)) == ERROR) //accept is a blocking call. until client connects, it will make the program wait
@@ -85,19 +85,26 @@ int main(int argc, char **argv)
 		while(data_len)
 		{
 			data_len = recv(cli, data, MAXDATALEN, 0);
-			if(strcmp(data, "close")==0)
+			if(strcmp(data, "close")==1)
 			{
 				printf("\nTERMINATION COMMAND EXECUTING NOW");
 				close(sock);
 				break;
 			}
+			/*
 			else if(data_len)
 			{
 				send(cli, data, data_len, 0);
 				data[data_len]='\0';
 				printf("Sent Message : %s", data);
-			}
+			}*/
 		}
+		fgets(input, MAXDATALEN, stdin);
+		
+		send(sock, input, strlen(input), 0);
+		
+		//len = recv(sock, output, MAXDATALEN, 0);
+		output[len] = '\0';
 //		sent = send(cli, message, strlen(message), 0);
 		//printf("\nSent %ud bytes to client %d ", sent, inet_ntoa(client.sin_addr));
 		close(cli);

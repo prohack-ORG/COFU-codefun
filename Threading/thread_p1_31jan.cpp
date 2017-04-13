@@ -21,7 +21,7 @@ struct Person{
 
 void *call_function(void *arg){
 	Person temp = *(Person *)arg;
-	cout<<"\nName is: "<<(temp.name)<<" and contact is "<<(temp.ph_number);
+	cout<<"\nName is: "<<(temp.name)<<" and contact is "<<(temp.ph_number)<<endl;
 	pthread_exit(NULL);
 }
 
@@ -34,12 +34,14 @@ int main()
 	work_friend.ph_number = 9008400968;
 
 	cout<<endl;
-	for(int arg=0 ; arg<NU_THREAD ; arg++){
-	status = pthread_create(&threads[arg],NULL,call_function,(void *)&work_friend);
+	for(int arg=0 ; arg<NU_THREAD ; arg++)
+	{
+		status = pthread_create(&threads[arg],NULL,call_function,(void *)&work_friend);
 		if(status){
 			cout<<"\nProblem encountered while creating thread";
 			exit(-1);
 		}
+		pthread_join(threads[arg], NULL);
 	}
 	pthread_exit(NULL);
     return 0;
