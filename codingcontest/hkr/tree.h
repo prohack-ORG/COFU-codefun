@@ -71,10 +71,8 @@ class RedBlackTree : public BinarySearchTree{
         bool isLeftLeft(Node* node);
         bool isRightLeft(Node* node);
         bool isLeftRight(Node* node);
-        void rotateRight(Node* node);      
-        void rotateLeft(Node* node);
-        void rotateRightLeft(Node* node);
-        void rotateLeftRight(Node* node);
+        Node* rotateRight(Node* node);      
+        Node* rotateLeft(Node* node);
         void remove(Node* node, int key);
     public:
         void insert(int key);

@@ -239,7 +239,7 @@ bool RedBlackTree::isRightLeft(Node* node){
 bool RedBlackTree::isLeftRight(Node* node){
     return isLeft(node) && isRight(node->getParent());  //verify
 }
-void RedBlackTree::rotateRight(Node* x){
+Node* RedBlackTree::rotateRight(Node* x){
     /*  
      *         |                 | 
      *         X                 Y
@@ -249,7 +249,7 @@ void RedBlackTree::rotateRight(Node* x){
      *     b   c                 c   a
      */
     Node* y = x->left;
-    if(y == NULL) return;  //TODO remove
+    if(y == NULL) return NULL;  //TODO remove
     x->left = y->right;
     if(y->right)
         y->right->parent = x;
@@ -262,8 +262,9 @@ void RedBlackTree::rotateRight(Node* x){
         x->parent->right = y;
     y->right = x;
     x->parent = y;
+    return y;
 }
-void RedBlackTree::rotateLeft(Node* y){
+Node* RedBlackTree::rotateLeft(Node* y){
     /*  
      *         |                 | 
      *         X                 Y
@@ -273,7 +274,7 @@ void RedBlackTree::rotateLeft(Node* y){
      *     b   c                 c   a
      */
     Node* x = y->right;
-    if(x == NULL) return; //TODO remove
+    if(x == NULL) return NULL; //TODO remove
     y->right = x->left;
     if(x->left)
         x->left->parent = y;
@@ -286,12 +287,7 @@ void RedBlackTree::rotateLeft(Node* y){
         y->parent->right = x;
     x->left = y;
     y->parent = x;
-}
-void RedBlackTree::rotateRightLeft(Node* node){
-    //TODO
-}
-void RedBlackTree::rotateLeftRight(Node* node){
-    //TODO
+    return x;
 }
 void RedBlackTree::insert(int key){
     // basic BST insert
@@ -323,11 +319,50 @@ void RedBlackTree::insert(int key){
     //2. parent is black
     //3. parent is red
     //   3.A uncle is red too
-    //   3.B no uncle 
-    //   3.C uncle is black 
-    if(newNode->parent->color == 'b')
+    //   3.B no uncle or uncle is black
+    curr = newNode;
+    if(curr->parent->color == 'b')
         return;
-    if(newNode->parent->color == 'r'){
+    while(curr->color == 'r' && curr->getParent() && curr->parent->color=='r'){
+        Node* uncle = getSibling(curr->parent);
+        if(uncle != NULL && uncle->color == 'r'){
+            uncle->setColor('b');
+            curr->parent->setColor('b');
+            if(curr->parent->parent == root){
+                curr->parent->parent->setColor('b');
+                break;
+            }
+            curr->parent->parent->setColor('r');
+            curr = curr->parent->parent;
+        }
+        else if((uncle != NULL && uncle->color == 'b') || !uncle){
+            if(isRightRight(curr)){
+                char tempColor = curr->parent->getColor();
+                curr->parent->setColor(curr->parent->parent->getColor());
+                curr->parent->parent->setColor(tempColor);
+                curr = rotateLeft(curr->parent->parent);
+            }
+            else if(isLeftLeft(curr)){
+                char tempColor = curr->parent->getColor();
+                curr->parent->setColor(curr->parent->parent->getColor());
+                curr->parent->parent->setColor(tempColor);
+                curr = rotateRight(curr->parent->parent);
+            }
+            else if(isRightLeft(curr)){
+                curr = rotateLeft(curr->parent);
+                char tempColor = curr->getColor();
+                curr->setColor(curr->parent->getColor());
+                curr->parent->setColor(tempColor);
+                curr = rotateRight(curr->parent);
+            }
+            else if(isLeftRight(curr)){
+                curr = rotateRight(curr->parent);
+                char tempColor = curr->getColor();
+                curr->setColor(curr->parent->getColor());
+                curr->parent->setColor(tempColor);
+                curr = rotateLeft(curr->parent);
+            }
+        }
     }
 }
 void RedBlackTree::remove(Node* node, int key){
@@ -337,7 +372,7 @@ void RedBlackTree::remove(int key){
     //TODO
 }
 bool RedBlackTree::isValidBST(){
-    //TODO
+    return true;
 }
 RedBlackTree::RedBlackTree(){
     //TODO
@@ -348,19 +383,20 @@ RedBlackTree::~RedBlackTree(){
 ///////////////////////////////////////////////////////
 //Wrapper Function
 int main(){
-    BinarySearchTree *tree = new BST();
+    //BinarySearchTree *tree = new BST();
+    BinarySearchTree *tree = new RedBlackTree();
     int arrInsert[] = {25,30,19,7,50,35,60,12,1,21,27,29,70,55,49,11,6,13};
     int arrDelete[] = {12,7,30,50,19,1,70,11,35};
     int len = sizeof(arrInsert)/sizeof(arrInsert[0]);
     int i=0;
     while(i<len && tree->isValidBST()){
         tree->insert(arrInsert[i++]);
-        //    std::cout<<"Inorder Print : ";
-        //    tree->printInOrder(); 
-        //    std::cout<<std::endl;
+            std::cout<<"Inorder Print : ";
+            tree->printInOrder(); 
+            std::cout<<std::endl;
         std::cout<<"min : "<<tree->getMin()<<" max : "<<tree->getMax()<<std::endl<<std::endl;
     }
-    len = sizeof(arrDelete)/sizeof(arrDelete[0]);
+/*    len = sizeof(arrDelete)/sizeof(arrDelete[0]);
     i=0;
     std::cout<<" deletion started \n\n";
     while(i<len && tree->isValidBST()){
@@ -370,6 +406,7 @@ int main(){
         //    std::cout<<std::endl;
         std::cout<<"min : "<<tree->getMin()<<" max : "<<tree->getMax()<<std::endl<<std::endl;
     }
+*/
     delete tree;
     return 0;
 }
