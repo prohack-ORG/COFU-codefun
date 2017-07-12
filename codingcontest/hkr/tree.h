@@ -9,6 +9,7 @@
 #include <vector>
 #include <cstdlib>
 #include <iostream>
+#include <limits.h>
 
 class Node{
     public:
@@ -45,6 +46,7 @@ class BinarySearchTree{
     public:
         int getMin();
         int getMax();
+        Node* getRoot();
         int getInorderSuccessor(int key);
         int getInorderPredessor(int key);
         void printInOrder();
@@ -71,9 +73,11 @@ class RedBlackTree : public BinarySearchTree{
         bool isLeftLeft(Node* node);
         bool isRightLeft(Node* node);
         bool isLeftRight(Node* node);
-        Node* rotateRight(Node* node);      
+        Node* rotateRight(Node* node);
         Node* rotateLeft(Node* node);
         void remove(Node* node, int key);
+        bool hasRedRelationship(Node* node);
+        bool isValidBST(Node* node,int blackHeight,int &maxBH, bool isfirstLeafFound);
     public:
         void insert(int key);
         void remove(int key);

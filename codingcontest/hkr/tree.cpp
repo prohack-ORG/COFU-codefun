@@ -67,8 +67,8 @@ Node* BinarySearchTree::getSibling(Node* node){
 }
 bool BinarySearchTree::isLeft(Node* node){
     if(isRoot(node)) return false;
-    int lVal = node->getParent()->getLeft()->getVal();
-    if(lVal == node->getVal())
+    Node* left = node->getParent()->getLeft();
+    if(left == node)
         return true;
     else return false;
 }
@@ -77,8 +77,8 @@ bool BinarySearchTree::isRoot(Node* node){
 }
 bool BinarySearchTree::isRight(Node* node){
     if(isRoot(node)) return false;
-    int rVal = node->getParent()->getRight()->getVal();
-    if(rVal == node->getVal())
+    Node* right = node->getParent()->getRight();
+    if(right == node)
         return true;
     else return false;
 }
@@ -109,6 +109,9 @@ int BinarySearchTree::getMax(){
         node = node->getRight();
     }
     return node->getVal();    
+}
+Node* BinarySearchTree::getRoot(){
+    return root;    
 }
 int BinarySearchTree::getInorderSuccessor(int key){
     return -1; //TODO
@@ -223,7 +226,7 @@ bool BST::isValidBST(Node* root, int prev){
 }
 bool BST::isValidBST(){
     if(root == NULL) return true;
-    int prev = -1;
+    int prev = INT_MIN;
     return BST::isValidBST(root,prev);
 }
 ////////////////////////RED BLACK TREE///////////////////////////
@@ -321,6 +324,7 @@ void RedBlackTree::insert(int key){
     //   3.A uncle is red too
     //   3.B no uncle or uncle is black
     curr = newNode;
+    std::cout<<"Node added ["<<curr->val<<"]\n";
     if(curr->parent->color == 'b')
         return;
     while(curr->color == 'r' && curr->getParent() && curr->parent->color=='r'){
@@ -371,8 +375,46 @@ void RedBlackTree::remove(Node* node, int key){
 void RedBlackTree::remove(int key){
     //TODO
 }
-bool RedBlackTree::isValidBST(){
+bool RedBlackTree::hasRedRelationship(Node* node){
+    if(node && node->getColor()== 'r'){
+        if((node->right && node->right->getColor() == 'r') || (node->left && node->left->getColor() == 'r'))
+            return true;
+    }
+    return false;
+}
+bool RedBlackTree::isValidBST(Node* node,int blackHeight,int &maxBH, bool isfirstLeafFound){
+//    printf("%s +++++++\n",__func__);
+    if(!node) return true;
+    if(hasRedRelationship(node))
+        return false;
+    if(node->getColor()=='b')
+        blackHeight += 1;
+    if(isLeaf(node)){
+        if(!isfirstLeafFound){
+            isfirstLeafFound = true;
+            maxBH = blackHeight;
+            return true;
+        }
+        else if(isfirstLeafFound && maxBH != blackHeight){
+            return false;
+        }
+        else if(isfirstLeafFound && maxBH == blackHeight){
+            return true;
+        }
+    }
+    bool flagL = true;
+    if(node->left)
+        flagL = isValidBST(node->left,blackHeight,maxBH,isfirstLeafFound);
+    if(flagL && node->right)
+        return isValidBST(node->right,blackHeight,maxBH,isfirstLeafFound);
     return true;
+//    printf("%s --------\n",__func__);
+}
+bool RedBlackTree::isValidBST(){
+    int maxiBH = -1;
+    if(root == NULL)
+        return true;
+    return root->getColor()=='b' && isValidBST(root,0,maxiBH,false);
 }
 RedBlackTree::RedBlackTree(){
     //TODO
@@ -385,28 +427,36 @@ RedBlackTree::~RedBlackTree(){
 int main(){
     //BinarySearchTree *tree = new BST();
     BinarySearchTree *tree = new RedBlackTree();
-    int arrInsert[] = {25,30,19,7,50,35,60,12,1,21,27,29,70,55,49,11,6,13};
-    int arrDelete[] = {12,7,30,50,19,1,70,11,35};
+    // int arrInsert[] = {25,30,19,7,50,35,60,12,1,21,27,29,70,55,49,11,6,13};
+    // int arrDelete[] = {12,7,30,50,19,1,70,11,35};
+    //int arrInsert[] = {5,9,-1,10,20,30,60,17,19,11,14,35};
+    int arrInsert[] = {5,9,-1,10,20,17,30,19,60,14,35,11};
     int len = sizeof(arrInsert)/sizeof(arrInsert[0]);
     int i=0;
     while(i<len && tree->isValidBST()){
         tree->insert(arrInsert[i++]);
-            std::cout<<"Inorder Print : ";
-            tree->printInOrder(); 
-            std::cout<<std::endl;
-        std::cout<<"min : "<<tree->getMin()<<" max : "<<tree->getMax()<<std::endl<<std::endl;
+        std::cout<<"Inorder Print : ";
+        tree->printInOrder(); 
+        std::cout<<std::endl;
+        if(tree->getRoot()==NULL){
+            std::cout<<"No Root !\n";
+        }
+        else{
+            std::cout<<"Root: ["<<tree->getRoot()->getVal()<<"]\t";
+        }
+        std::cout<<"min : "<<tree->getMin()<<" max : "<<tree->getMax()<<"\n\n";
     }
-/*    len = sizeof(arrDelete)/sizeof(arrDelete[0]);
-    i=0;
-    std::cout<<" deletion started \n\n";
-    while(i<len && tree->isValidBST()){
-        tree->remove(arrDelete[i++]);
-        //    std::cout<<"Inorder Print : ";
-        //    tree->printInOrder(); 
-        //    std::cout<<std::endl;
-        std::cout<<"min : "<<tree->getMin()<<" max : "<<tree->getMax()<<std::endl<<std::endl;
+    /*    len = sizeof(arrDelete)/sizeof(arrDelete[0]);
+          i=0;
+          std::cout<<" deletion started \n\n";
+          while(i<len && tree->isValidBST()){
+          tree->remove(arrDelete[i++]);
+    //    std::cout<<"Inorder Print : ";
+    //    tree->printInOrder(); 
+    //    std::cout<<std::endl;
+    std::cout<<"min : "<<tree->getMin()<<" max : "<<tree->getMax()<<std::endl<<std::endl;
     }
-*/
+     */
     delete tree;
     return 0;
 }
