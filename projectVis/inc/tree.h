@@ -65,7 +65,7 @@ class BST : public BinarySearchTree{
         ~BST();
         void insert(int key);
         void remove(int key);
-        bool isValidBST(); //assuming Node data positive integer
+        bool isValidBST(); //assuming value of node data is no less than minimum integer
 };
 class RedBlackTree : public BinarySearchTree{
     private:
@@ -84,4 +84,17 @@ class RedBlackTree : public BinarySearchTree{
         bool isValidBST();
         RedBlackTree();
         ~RedBlackTree();
+};
+class Treaps : public BinarySearchTree{
+    private:
+        Node* rotateRight(Node* node);
+        Node* rotateLeft(Node* node);
+        void remove(Node* node, int key);
+        bool isValidBST(Node* node,int blackHeight,int &maxBH, bool isfirstLeafFound);
+    public:
+        void insert(int key);
+        void remove(int key);
+        bool isValidBST();
+        Treaps();
+        ~Treaps();
 };
