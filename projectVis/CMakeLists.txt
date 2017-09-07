@@ -14,5 +14,8 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 # The following folder will be included
 include_directories("${PROJECT_SOURCE_DIR}/inc")
 
-add_executable(balanceBST ${PROJECT_SOURCE_DIR}/src/main.cpp ${PROJECT_SOURCE_DIR}/src/tree.cpp
-${PROJECT_SOURCE_DIR}/src/redBlackTree.cpp)
+add_executable(balanceBST 
+                ${PROJECT_SOURCE_DIR}/src/main.cpp
+                ${PROJECT_SOURCE_DIR}/src/tree.cpp
+                ${PROJECT_SOURCE_DIR}/src/redBlackTree.cpp
+               )
