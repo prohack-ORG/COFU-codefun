@@ -1,0 +1,7 @@
+5
+aaa
+aabbbaa
+ababab
+cccaccc
+a
+
