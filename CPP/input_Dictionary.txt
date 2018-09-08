@@ -1,0 +1,11 @@
+add Hello
+add Hell
+add ello
+add World
+add GOOD
+add NIGHT
+del GOOD
+chk World
+chk GOOD
+print
+exit
